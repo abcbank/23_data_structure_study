@@ -1,0 +1,9 @@
+﻿  pch.c
+  dijkstra.c
+C:\Users\woejr\Documents\navigator\dijkstra\dijkstra\dijkstra.c(8,76): warning C4273: 'dijkstra': dll 연결이 일치하지 않습니다.
+C:\Users\woejr\Documents\navigator\dijkstra\dijkstra\dijkstra.h(27,30): message : 'dijkstra'의 이전 정의를 참조하십시오.
+C:\Users\woejr\Documents\navigator\dijkstra\dijkstra\dijkstra.c(65,28): warning C4133: '함수': 'float *'과(와) 'int *' 사이의 형식이 호환되지 않습니다.
+  dllmain.c
+  코드를 생성하고 있습니다...
+     C:\Users\woejr\Documents\navigator\dijkstra\x64\Debug\dijkstra.lib 라이브러리 및 C:\Users\woejr\Documents\navigator\dijkstra\x64\Debug\dijkstra.exp 개체를 생성하고 있습니다.
+  dijkstra.vcxproj -> C:\Users\woejr\Documents\navigator\dijkstra\x64\Debug\dijkstra.dll

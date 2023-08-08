@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>html</title>    
+        <script src="http://code.jquery.com/jquery-latest.js"></script> 
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+            integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+        <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=352d10872a1608ca7eca6298862af0b5&libraries=services,clusterer"></script>
+        <script src="{{ url_for('static', filename='js/index.js') }}" > </script>
+    </head>
+    <body>
+        <form class="form" method="get" action="/navigate" style="margin:30px;">
+            <div class="form-row">
+                <div class="col-md-5 mb-3">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                        <img src="{{ url_for('static', filename='images/naviPin.png') }}" width="35px;" height="35px;">
+                        <div class="input-group-text">출발지</div>
+                    </div>
+                    <input type="text" class="form-control" name="validationDefaultSource" id="validationDefaultSource" placeholder="출발지" >
+                  </div>
+                </div>
+                <div class="col-md-1 mb-3">
+                    <button type="button" id="ToggleSource" onclick="SelectSource()" class="btn btn-primary btn-md btn-block">출발지 변경</button>
+                </div>
+              <div class="col-md-5 mb-3">
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <img src="{{ url_for('static', filename='images/naviPin.png') }}" width="35px;" height="35px;">
+                    <div class="input-group-text">도착지</div>
+                  </div>
+                  <input type="text" class="form-control" name="validationDefaultDestination" id="validationDefaultDestination" placeholder="도착지" >
+                </div>
+              </div>
+              <div class="col-md-1 mb-3">
+                <button type="button" id="ToggleDest" onclick="SelectDestination()" class="btn btn-primary btn-md btn-block">도착지 변경</button>
+              </div>
+            </div>
+            <div>
+                <button type="submit" id="Run"onclick="Run()" class="btn btn-primary btn-md btn-block">Run</button>
+            </div>
+        </form>
+        <div id="map" style="width:100%;height:35vw;"></div>
+
+        <footer class="text-center text-lg-start bg-white text-muted" style="font-size:25px;" paddin>
+            <div class="container">
+                <div class="row" style="padding:20px;">
+                    <div class="col-md-4">
+                        <div style="border: 2px solid green; border-radius: 6px; height:fit-content;">
+                            <div class="badge badge-info p-2 rounded-4" style="height:100%; float:left">
+                                <img src="{{ url_for('static', filename='images/naviClock.png') }}" width="22px;"; height="22px;">
+                                <span>
+                                    소요 시간: 
+                                </span>
+                            </div>
+                            <!-- Flask If 문 -->
+                            <!-- PathList|Lenght => PathList의 Length 속성 참조 -->
+                            {% if PathList|length > 0 %}
+                            <span>
+                                <!-- 길이가 0 이상일 경우, 거리 출력 -->
+                                {{PathList[3]}}
+                            </span>
+                            {% else %}
+                            <span>
+                                <!-- 그 외에 N/A 출력 -->
+                                N/A
+                            </span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div style="border: 2px solid green; border-radius: 6px; height:fit-content;">
+                            <div class="badge badge-info p-2 rounded-4" style="height:100%; float:left">
+                                <img src="{{ url_for('static', filename='images/naviClock.png') }}" width="22px;"; height="22px;">
+                                <span>
+                                    도착 예정 시간: 
+                                </span>
+                            </div>
+                            <span>
+                                {% if PathList|length > 0 %}
+                                    {{PathList[4]}}
+                                {% else %}
+                                    N/A
+                                {% endif %}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div style="border: 2px solid green; border-radius: 6px; height:fit-content;">
+                            <div class="badge badge-info p-2 rounded-4" style="height:100%; float:left">
+                                <img src="{{ url_for('static', filename='images/naviClock.png') }}" width="22px;"; height="22px;">
+                                <span>
+                                    이동 거리: 
+                                </span>
+                            </div>
+                            <span>
+                                {% if PathList|length > 0 %}
+                                    {{ PathList[2] }}km
+                                {% else %}
+                                    N/A
+                                {% endif %}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="margin:20px;">
+                    <div class="col-md-6">
+                        안전 운전 하세요!
+                    </div>
+                    <div class="col-md-6" >
+                        <form style="width:30%; margin:auto;">
+                            <button type="button" onclick="location.href='/' " class="btn btn-primary btn-md btn-block">Init</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </footer>
+        <!-- Footer -->
+        <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+            integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+            crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+            integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+            crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+            integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+            crossorigin="anonymous"></script>
+        <script>	
+            // 문서 준비 후 실행
+            $(document).ready(function(){
+                // JSList | tojson: 전달받은 파라미터 중 JCList라는 이름의 항목
+                // HighwayList | tojson: 전달받은 파라미터 중 HighwayList라는 이름의 항목
+                // PathList | tojson: 전달받은 파라미터 중 PathList라는 이름의 항목
+                init({{JCList | tojson}}, {{HighwayList | tojson}}, {{ PathList | tojson}})
+            });
+        </script>
+    </body>
+</html>

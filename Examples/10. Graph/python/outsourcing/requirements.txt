@@ -1,0 +1,6 @@
+Flask
+BeautifulSoup4
+pandas
+numpy
+folium
+haversine
